@@ -1,0 +1,27 @@
+.navbar {
+  background: rgb(3, 102, 141);
+  position: sticky;
+  top: 0;
+  z-index: 12;
+}
+
+.navbar > ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+
+.nav-item {
+  color: white;
+  margin-right: 12px;
+  margin-left: 12px;
+  padding: 8px;
+}
+.nav-item:hover {
+  background-color: rgb(8, 144, 255);
+}
+a {
+  text-decoration: none;
+  color: white;
+}

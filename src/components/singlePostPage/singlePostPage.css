@@ -1,0 +1,31 @@
+.post {
+  background-color: gray;
+  border: 1px solid gray;
+  padding: 8px;
+  margin: 4px auto;
+  width: 50%;
+}
+.post__header {
+  display: flex;
+  flex-direction: column;
+  /* background-color: turquoise; */
+  position: relative;
+}
+.post__title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.post__header > small {
+  position: absolute;
+  right: 10px;
+  top: 2px;
+}
+.post__main p > {
+  /* line-height: 5rem; */
+}
+.post__footer {
+  /* background-color: slategrey; */
+}
+.editBtn {
+  background-color: blue;
+}

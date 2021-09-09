@@ -1,0 +1,15 @@
+.postList {
+  width: 50%;
+  margin: 8px auto;
+  padding: 4px;
+}
+.postItem {
+  border: 1px solid gray;
+  margin: 8px 0;
+}
+.btn {
+  background-color: black;
+  padding: 4px;
+  text-decoration: none;
+  margin: 4px;
+}
