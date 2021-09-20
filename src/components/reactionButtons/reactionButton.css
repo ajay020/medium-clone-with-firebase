@@ -1,4 +1,9 @@
 .reaction-button {
   margin: 8px;
-  padding: 2px 4px;
+  padding: 2px 8px;
+}
+.reaction-button-selected {
+  margin: 8px;
+  padding: 2px 8px;
+  border: 1px solid red;
 }

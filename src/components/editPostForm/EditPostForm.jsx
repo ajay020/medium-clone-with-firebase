@@ -1,6 +1,6 @@
 import { useHistory, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { postUpdated } from "../../features/posts/postSlice";
+import { selectPostById, updatePost } from "../../features/posts/postSlice";
 import { useState } from "react";
 import "./editPostForm.css";
 
@@ -8,10 +8,8 @@ const EditPostForm = () => {
   const { postId } = useParams();
   //   console.log(postId);
 
-  const post = useSelector((state) =>
-    state.posts.posts.find((post) => post.id === postId)
-  );
-  //   console.log(post);
+  const post = useSelector((state) => selectPostById(state, postId));
+  //   console.log("post", post);
 
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.content);
@@ -24,7 +22,8 @@ const EditPostForm = () => {
 
   const onSavePostClicked = () => {
     if (title && content) {
-      dispatch(postUpdated({ id: postId, title, content }));
+      dispatch(updatePost({ id: postId, title, content }));
+
       history.push(`/posts/${postId}`);
     }
   };

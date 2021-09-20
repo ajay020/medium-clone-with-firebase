@@ -1,37 +1,50 @@
-import { useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useParams, useHistory } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import "./singlePostPage.css";
 import PostAuthor from "../postAuthor/PostAuthor";
 import ReactionButtons from "../reactionButtons/ReactionButtons";
+import { selectPostById } from "../../features/posts/postSlice";
+import { deletePost } from "./../../features/posts/postSlice";
+import "./singlePostPage.css";
 
 const Post = () => {
   const { postId } = useParams();
-
-  const post = useSelector((state) =>
-    state.posts.posts.find((post) => post.id === postId)
-  );
-
-  const { title, user, content } = post;
-
+  //   console.log("post id", postId);
+  const post = useSelector((state) => selectPostById(state, postId));
+  const currentUser = useSelector((state) => state.users.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
   if (!post) {
     return <div> Post not found </div>;
   }
+  const { title, genre, user, content } = post;
+
+  const deletePostHandler = () => {
+    if (currentUser) {
+      dispatch(deletePost(postId));
+      // history.push("/");
+      history.goBack();
+    }
+  };
 
   return (
     <div className="post">
       <div className="post__header">
         <span className="post__title">{title}</span>
+        <span>{genre}</span>
         <PostAuthor userId={user} />
-        <small>timestamp</small>
+        <small>{post.date}</small>
       </div>
       <div className="post__main">
-        <p>{content.substring(0, 100)}</p>
+        <p>{content}</p>
       </div>
       <div className="post__footer">
-        <button className="editBtn">
-          <Link to={`/editPost/${postId}`}> Edit Post </Link>
-        </button>
+        {currentUser && (
+          <button className="editBtn">
+            <Link to={`/editPost/${postId}`}> Edit Post </Link>
+          </button>
+        )}
+        {currentUser && <button onClick={deletePostHandler}>Delete</button>}
       </div>
       <ReactionButtons post={post} />
     </div>

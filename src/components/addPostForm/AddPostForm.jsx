@@ -1,39 +1,54 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postAdded } from "../../features/posts/postSlice";
+import { addNewPost } from "../../features/posts/postSlice";
+import { ClipLoader } from "react-spinners";
 import "./addPostForm.css";
 
 const AddPost = () => {
   const [title, setTitle] = useState("");
+  const [genre, setGenre] = useState("");
   const [content, setContent] = useState("");
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState("1");
+  const [addRequestStatus, setAddRequestStatus] = useState("idle");
 
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.users);
-
+  const addPostStatus = useSelector((state) => state.posts.addPostStatus);
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
-  const onAuthorChanged = (e) => setUserId(e.target.value);
+  const onGenreChanged = (e) => setGenre(e.target.value);
+  const currentUser = useSelector((state) => state.users.user);
 
-  const userOptions = users.map((user) => (
-    <option key={user.id} value={user.id}>
-      {user.name}
-    </option>
-  ));
+  //   const userOptions = users.map((user) => (
+  //     <option key={user.id} value={user.id}>
+  //       {user.name}
+  //     </option>
+  //   ));
 
-  const canSave = Boolean(title) && Boolean(content) && Boolean(userId);
+  const canSave =
+    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
 
-  const onSavePostClicked = () => {
-    if (title && content) {
-      dispatch(postAdded(title, content, userId));
+  const onSavePostClicked = async () => {
+    if (canSave && currentUser) {
+      try {
+        setAddRequestStatus("pending");
+        dispatch(addNewPost({ title, genre, content, user: currentUser.id }));
+
+        setTitle("");
+        setContent("");
+        setGenre("");
+      } catch (err) {
+        console.error("Failed to save the post: ", err);
+      } finally {
+        setAddRequestStatus("idle");
+      }
     }
-    setTitle("");
-    setContent("");
   };
-
   return (
     <div className="addPost">
-      <h2>Add a New Post</h2>
+      <h2>
+        Add a New Post
+        {addPostStatus === "loading" ? <ClipLoader loading={true} /> : ""}
+      </h2>
       <form>
         <label htmlFor="postTitle">Post Title :</label>
         <div className="form__group">
@@ -46,11 +61,20 @@ const AddPost = () => {
             onChange={onTitleChanged}
           />
         </div>
-        <label htmlFor="postUser">Users:</label>
-        <select id="postUser" value={userId} onChange={onAuthorChanged}>
+        <label htmlFor="postUser">Genre:</label>
+        {/* <select id="postUser" value={userId} onChange={onAuthorChanged}>
           <option value=""></option>
           {userOptions}
-        </select>
+        </select> */}
+        <div className="form__group">
+          <input
+            type="text"
+            name="genre"
+            value={genre}
+            placeholder="Genre"
+            onChange={onGenreChanged}
+          />
+        </div>
         <label htmlFor="postContent">Post Content:</label>
         <div className="form__group">
           <textarea

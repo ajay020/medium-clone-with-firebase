@@ -3,12 +3,18 @@
   position: sticky;
   top: 0;
   z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .navbar > ul {
   margin: 0;
   padding: 0;
   list-style: none;
+  display: flex;
+}
+ul > div {
   display: flex;
 }
 
