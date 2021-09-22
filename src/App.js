@@ -9,6 +9,21 @@ import Login from "./components/login/Login";
 import { auth } from "./api/firebaseAPI";
 import { useDispatch } from 'react-redux';
 import { logInUser, logOutUser } from "./features/users/userSlice";
+import { createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
+import { purple } from '@mui/material/colors';
+
+const theme = createTheme({
+    palette:{
+        primary: {
+            main: '#fff',
+          },
+        secondary: {
+            main:"#000"
+        }  
+    }
+})
+
 
 function App() {
     const dispatch = useDispatch()
@@ -26,26 +41,28 @@ function App() {
     },[])
 
   return (
-    <Router>
-      <Navbar/>
-      <Switch>
-        <Route exact path="/">
-          <PostList />
-        </Route>
-        <Route exact path="/register">
-          <Register />
-        </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route exact path="/posts/:postId">
-          <SinglePostPage/>
-        </Route>
-        <Route path="/editPost/:postId">
-          <EditPostForm/>
-        </Route>
-      </Switch>
-    </Router>
+      <ThemeProvider theme={theme}>
+        <Router>
+        <Navbar/>
+        <Switch>
+            <Route exact path="/">
+            <PostList />
+            </Route>
+            <Route exact path="/register">
+            <Register />
+            </Route>
+            <Route exact path="/login">
+            <Login />
+            </Route>
+            <Route exact path="/posts/:postId">
+            <SinglePostPage/>
+            </Route>
+            <Route path="/editPost/:postId">
+            <EditPostForm/>
+            </Route>
+        </Switch>
+        </Router>
+    </ThemeProvider>
   );
 }
 

@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import "./register.css";
 import { useSelector } from "react-redux";
 import { ClipLoader } from "react-spinners";
+import { Button } from "@mui/material";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -58,6 +59,7 @@ const Register = () => {
           />
         </div>
         <button className="btn">Register</button>
+        <Button variant="outlined">Register</Button>
       </form>
     </div>
   );
