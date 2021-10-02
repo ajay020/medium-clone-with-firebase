@@ -6,7 +6,12 @@ const PostAuthor = ({ userId }) => {
     state.users.users.find((user) => user.id === userId)
   );
 
-  return <span> {author ? author.name : "Unknown author"}</span>;
+  return (
+    <span style={{ color: "tomato" }}>
+      {" "}
+      {author ? author.name : "Unknown author"}
+    </span>
+  );
 };
 
 export default PostAuthor;

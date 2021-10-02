@@ -39,7 +39,7 @@ export const addNewPost = createAsyncThunk(
         try {
             const docRef = await db.collection('posts').add(post);
             const doc = await docRef.get()
-            // console.log('Added document with ID: ', doc.data());     
+            console.log('Added document with ID: ', doc.data());     
             return {id:doc.id,...doc.data()}
         } catch (error) {
             console.log('Could not add the documnet : ', error);     
