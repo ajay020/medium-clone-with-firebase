@@ -68,14 +68,14 @@ const Login = () => {
     }
   }, [user]);
 
-  const loginHandler = (event) => {
-    event.preventDefault();
+  //   const loginHandler = (event) => {
+  //     event.preventDefault();
 
-    if (email && password) {
-      login(email, password);
-      setLoading(true);
-    }
-  };
+  //     if (email && password) {
+  //       login(email, password);
+  //       setLoading(true);
+  //     }
+  //   };
 
   const handleSubmit = (event) => {
     event.preventDefault();

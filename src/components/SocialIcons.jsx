@@ -1,7 +1,7 @@
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+// import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const SocialIcons = ({ post }) => {
+const SocialIcons = ({ post, marked, handleFavourite }) => {
   const classses = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -72,13 +73,12 @@ const SocialIcons = ({ post }) => {
       <IconButton size="small" className={classses.root}>
         <LinkOutlinedIcon />
       </IconButton>
-      <IconButton size="small" className={classses.root}>
-        <BookmarkAddOutlinedIcon />
+
+      <IconButton onClick={handleFavourite}>
+        {marked ? <BookmarkIcon /> : <BookmarkAddOutlinedIcon />}
       </IconButton>
-      <IconButton size="small" className={classses.root}>
-        {currentUser?.id === post?.user && (
-          <MoreHorizOutlinedIcon onClick={handleClick} />
-        )}
+      <IconButton size="small" className={classses.root} onClick={handleClick}>
+        {currentUser?.id === post?.user && <MoreHorizOutlinedIcon />}
 
         <Popover
           open={open}

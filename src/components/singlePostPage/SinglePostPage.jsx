@@ -2,7 +2,6 @@ import { useParams, useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import PostAuthor from "../postAuthor/PostAuthor";
 import { selectPostById } from "../../features/posts/postSlice";
-import { deletePost } from "./../../features/posts/postSlice";
 import "./singlePostPage.css";
 
 // material ui
@@ -19,6 +18,7 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
+
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -26,6 +26,10 @@ import ShareIcon from "@mui/icons-material/Share";
 import { makeStyles } from "@mui/styles";
 import SocialIcons from "./../SocialIcons";
 import { styled } from "@mui/material/styles";
+import { fetchFavouritePosts } from "../../features/users/userSlice";
+
+import { useState, useEffect } from "react";
+import { addFavourites } from "./../../features/users/userSlice";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -115,31 +119,43 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const Post = () => {
+const SinglePostPage = () => {
   const classes = useStyles();
   const { postId } = useParams();
-  //   console.log("post id", postId);
   const post = useSelector((state) => selectPostById(state, postId));
-  const currentUser = useSelector((state) => state.users.user);
+  const favoritePosts = useSelector((state) => state.users.favoritePosts);
+  //   console.log("post id", favoritePosts);
   const dispatch = useDispatch();
-  const history = useHistory();
+  const currentUser = useSelector((state) => state.users.user);
+
+  const [marked, setMarked] = useState(false);
+
+  //check if current post is marked favourite
+  useEffect(() => {
+    if (
+      favoritePosts &&
+      favoritePosts.find((item) => item.postId === post?.id)
+    ) {
+      setMarked(true);
+    }
+  }, [favoritePosts]);
+
   if (!post) {
     return <div> Post not found </div>;
   }
-  const { title, genre, user, content } = post;
+  const { user } = post;
 
-  const deletePostHandler = () => {
-    if (currentUser) {
-      dispatch(deletePost(postId));
-      // history.push("/");
-      history.goBack();
-    }
+  const handleFavourite = () => {
+    setMarked(!marked);
+    dispatch(addFavourites({ uid: currentUser.id, postId: post.id, marked }));
   };
+
+  console.log("SinglePostPage Render");
 
   return (
     <Box className={classes.main}>
       <Grid className={classes.gridContainer} container spacing={1}>
-        <Grid item xs={0} sm={4} md={3}>
+        <Grid item sm={4} md={3}>
           <Box className={classes.sidebar}>
             <Item>
               <Typography variant="h6">
@@ -165,7 +181,13 @@ const Post = () => {
                 <CardHeader
                   sx={{ padding: 0, marginTop: "8px" }}
                   avatar={<Avatar sx={{ bgcolor: red[500] }}>R</Avatar>}
-                  action={<SocialIcons post={post} />}
+                  action={
+                    <SocialIcons
+                      post={post}
+                      marked={marked}
+                      handleFavourite={handleFavourite}
+                    />
+                  }
                   title={
                     <Box>
                       <PostAuthor userId={user} />
@@ -209,29 +231,6 @@ const Post = () => {
       </Grid>
     </Box>
   );
-
-  //   return (
-  //     <div className="post">
-  //       <div className="post__header">
-  //         <span className="post__title">{title}</span>
-  //         <span>{genre}</span>
-  //         <PostAuthor userId={user} />
-  //         <small>{post.date}</small>
-  //       </div>
-  //       <div className="post__main">
-  //         <p>{content}</p>
-  //       </div>
-  //       <div className="post__footer">
-  //         {currentUser && (
-  //           <button className="editBtn">
-  //             <Link to={`/editPost/${postId}`}> Edit Post </Link>
-  //           </button>
-  //         )}
-  //         {currentUser && <button onClick={deletePostHandler}>Delete</button>}
-  //       </div>
-  //       <ReactionButtons post={post} />
-  //     </div>
-  //   );
 };
 
-export default Post;
+export default SinglePostPage;

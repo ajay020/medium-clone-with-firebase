@@ -28,6 +28,6 @@ ul > div {
   background-color: rgb(8, 144, 255);
 }
 a {
-  text-decoration: none;
-  color: white;
+  /* text-decoration: none; */
+  /* color: white; */
 }

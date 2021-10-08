@@ -3,7 +3,6 @@ import { register } from "../../features/users/authMethods";
 import { useHistory } from "react-router";
 import "./register.css";
 import { useSelector } from "react-redux";
-import { ClipLoader } from "react-spinners";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
@@ -18,7 +17,7 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import { makeStyles } from "@mui/styles";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 
 const useStyles = makeStyles({
   root: {
@@ -32,22 +31,22 @@ const useStyles = makeStyles({
   },
 });
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: "#757ce8",
-      main: "#3f50b5",
-      dark: "#002884",
-      contrastText: "#fff",
-    },
-    secondary: {
-      light: "#ff7961",
-      main: "#f44336",
-      dark: "#ba000d",
-      contrastText: "#000",
-    },
-  },
-});
+// const theme = createTheme({
+//   palette: {
+//     primary: {
+//       light: "#757ce8",
+//       main: "#3f50b5",
+//       dark: "#002884",
+//       contrastText: "#fff",
+//     },
+//     secondary: {
+//       light: "#ff7961",
+//       main: "#f44336",
+//       dark: "#ba000d",
+//       contrastText: "#000",
+//     },
+//   },
+// });
 
 const Register = () => {
   const classes = useStyles();

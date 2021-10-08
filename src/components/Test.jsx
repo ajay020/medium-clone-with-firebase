@@ -1,74 +1,63 @@
 import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import { CssBaseline } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
+import { useEffect, useState } from "react";
+import db from "./../api/firebaseAPI";
+import { useSelector } from "react-redux";
 
-import { makeStyles } from "@mui/styles";
+const Noob = ({ data }) => {
+  const [marked, setMarked] = useState(false);
+  const cUser = useSelector((state) => state.users.user);
+  console.log("cuser22", cUser);
 
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+  useEffect(() => {
+    console.log("cuser333", cUser);
+    const fetchTest = async () => {
+      console.log("cuser11", cUser);
+      const userRef = db.collection("users").doc(cUser?.id);
+      //   const fevourateRef = userRef.collection("favouritePosts");
 
-const useStyles = makeStyles({
-  main: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexWrap: "no-wrap",
-  },
-  one: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "orange",
-    flexGrow: "1",
-    // height: "100vh",
-    // position: "fixed",
-    // top: "50%",
-    // left: "10%",
-    // padding: "12px",
-    // overflow: "hidden",
-    // zindex: "100",
-  },
-  two: {
-    display: "flex",
-    background: "blue",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-    // height: "40vh",
-    margin: "2px 0",
-    flexGrow: "2",
+      try {
+        const fevCollection = userRef.collection("favouritePosts");
+        try {
+          const snapShots = await fevCollection.get();
+          console.log("fvcollec", snapShots.docs);
 
-    // overflowY: "scroll",
-  },
-  three: {},
-});
+          snapShots.docs.map((doc) => {
+            console.log("doc-id", doc.id);
+
+            setMarked(true);
+          });
+        } catch (error) {
+          console.log("err", error);
+        }
+      } catch (error) {
+        console.log("err>>", error);
+      }
+    };
+    if (cUser) {
+      fetchTest();
+    }
+    // setTimeout(() => {
+    //   setMarked(true);
+    // }, 2000);
+  }, [data, cUser]);
+
+  return (
+    <Container>
+      <div> {data}</div>
+      <div>{marked ? "true" : "false"}</div>
+    </Container>
+  );
+};
 
 const Test = () => {
-  const classes = useStyles();
+  const list = [1, 2];
+
   return (
-    <Box className={classes.main}>
-      <Box variant="div" className={classes.one}>
-        one
-      </Box>
-      <Box className={classes.two}>
-        <Box>
-          <Typography>One</Typography>
-          <Typography>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tenetur
-            aliquam ratione incidunt fuga quae dolorem, delectus eligendi
-            impedit ad temporibus illo nisi nemo vero repellat quo suscipit
-            fugit! Excepturi, earum.
-          </Typography>
-        </Box>
-      </Box>
-    </Box>
+    <div>
+      {list.map((item) => (
+        <Noob key={item} data={item} />
+      ))}
+    </div>
   );
 };
 

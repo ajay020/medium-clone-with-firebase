@@ -7,13 +7,13 @@ import Register from "./components/register/Register";
 import Login from "./components/login/Login";
 import { auth } from "./api/firebaseAPI";
 import { useDispatch } from 'react-redux';
-import { logInUser, logOutUser } from "./features/users/userSlice";
+import { fetchFavouritePosts, logInUser, logOutUser } from "./features/users/userSlice";
 import { createTheme,ThemeProvider } from "@mui/material/styles";
 import Layout from "./components/Layout";
 import AddPostForm from './components/addPostForm/AddPostForm';
 import OurStory from './components/OurStory';
 import Test from "./components/Test";
-import { amber,red, deepOrange, grey } from "@mui/material/colors";
+import { red, grey } from "@mui/material/colors";
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} })
 
@@ -70,7 +70,10 @@ function App() {
         auth.onAuthStateChanged(user =>{
             if(user){
                 // user is signed in
-                dispatch(logInUser(user.uid))
+                dispatch(logInUser({ uid: user.uid}))
+
+                //fetch user's favourite posts list
+                dispatch(fetchFavouritePosts({uid: user.uid}))
             }else{
                 // user is signed out
                 dispatch(logOutUser())
@@ -78,6 +81,7 @@ function App() {
         })
     },[])
 
+    console.log("App render")
   return (
       <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>

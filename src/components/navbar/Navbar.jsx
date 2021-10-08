@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme) => {
       borderRadius: "50px",
       color: theme.palette.text.primary,
       "&:hover": {
-        // color: "gray",
+        color: "black",
+        cursor: "pointer",
       },
     },
     themeBtn: {
@@ -46,16 +47,6 @@ const useStyles = makeStyles((theme) => {
       padding: "2px",
       margin: "2px",
     },
-    // btn: {
-    //   borderRadius: "50px",
-    //   background: "#000",
-    //   color: "secondary",
-    //   border: "1px solid black",
-    //   "&:hover": {
-    //     background: "black",
-    //     color: "white",
-    //   },
-    // },
   };
 });
 
@@ -64,9 +55,7 @@ const Navbar = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   const currentUser = useSelector((state) => state.users.user);
-
   const [anchorEl, setAnchorEl] = useState(null);
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -126,15 +115,6 @@ const Navbar = () => {
               Write
             </Typography>
 
-            {/* <Typography
-              className={classes.nav_item}
-              component={Link}
-              to="/login"
-              // variant="contained"
-              onClick={() => logout()}
-            >
-              LogOut
-            </Typography> */}
             <Box sx={{ marginRight: "40px", marginLeft: "22px" }}>
               <Avatar
                 aria-describedby={id}
@@ -209,11 +189,8 @@ const Navbar = () => {
                   <ListItem button>
                     <ListItemText secondary="Help" />
                   </ListItem>
-                  <ListItem button>
-                    <ListItemText
-                      secondary="Sign Out"
-                      onClick={() => logout()}
-                    />
+                  <ListItem button onClick={() => logout()}>
+                    <ListItemText secondary="Sign Out" />
                   </ListItem>
                 </List>
               </Popover>
@@ -248,36 +225,5 @@ const Navbar = () => {
       </Toolbar>
     </AppBar>
   );
-
-  //   return (
-  //     <div className="navbar">
-  //       <ul className="">
-  //         <li className="nav-item">
-  //           <Link to="/">Home </Link>
-  //         </li>
-  //         <li className="nav-item">Contact</li>
-  //         <li className="nav-item">About</li>
-  //       </ul>
-  //       <ul>
-  //         {currentUser ? (
-  //           <li className="nav-item">
-  //             <Link to="/login" onClick={() => logout()}>
-  //               Hi, {currentUser.name} Logout
-  //             </Link>
-  //           </li>
-  //         ) : (
-  //           <div>
-  //             <li className="nav-item">
-  //               <Link to="/register"> Register </Link>
-  //             </li>
-  //             <li className="nav-item">
-  //               <Link to="/login"> Login </Link>
-  //             </li>
-  //           </div>
-  //         )}
-  //       </ul>
-  //     </div>
-  //   );
 };
-
 export default Navbar;

@@ -9,28 +9,29 @@ import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import moment from "moment";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 import { makeStyles } from "@mui/styles";
 
 import { Link } from "react-router-dom";
 import PostAuthor from "./postAuthor/PostAuthor";
-import { HorizontalRuleOutlined } from "@mui/icons-material";
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useEffect } from "react";
+import { addFavourites } from "./../features/users/userSlice";
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles(() => {
   return {
     root: {
       // background: "whitesmoke",
       display: "flex",
       justifyContent: "center",
       // padding: "8px",
-      marginTop: "20px",
+      //   marginTop: "20px",
     },
     genreBtn: {
       background: "#ccc",
@@ -48,6 +49,23 @@ const useStyles = makeStyles((theme) => {
 
 const PostExcerpt = ({ post }) => {
   const classes = useStyles();
+  const currentUser = useSelector((state) => state.users.user);
+  const dispatch = useDispatch();
+  const favouritePosts = useSelector((state) => state.users.favoritePosts);
+  const [marked, setMarked] = useState(false);
+
+  useEffect(() => {
+    if (favouritePosts?.find((item) => item.postId === post.id)) {
+      setMarked(true);
+    }
+  }, [favouritePosts]);
+
+  const handleFavourite = () => {
+    setMarked(!marked);
+    dispatch(addFavourites({ uid: currentUser.id, postId: post.id, marked }));
+  };
+
+  console.log("PostExcerpt render");
   return (
     <Container className={classes.root}>
       <Card sx={{ width: 600, marginBottom: 2, padding: "8px" }}>
@@ -55,10 +73,15 @@ const PostExcerpt = ({ post }) => {
           sx={{ padding: "0" }}
           avatar={
             <Avatar
-              sx={{ width: "20px", height: "20px", padding: "4px" }}
-              square
+              sx={{
+                width: "20px",
+                height: "20px",
+                padding: "4px",
+                fontSize: "13px",
+                background: "black",
+              }}
             >
-              {post.title[0].toUpperCase()}
+              <PostAuthor userId={post.user} singleLetter={true} />
             </Avatar>
           }
           title={
@@ -80,13 +103,14 @@ const PostExcerpt = ({ post }) => {
 
         <CardActions sx={{ padding: "0", marginTop: "4px", display: "flex" }}>
           <Typography variant="caption">
-            {moment(post.date).format("dddd, MMMM Do")}{" "}
+            {moment(post.date).format("dddd, MMMM Do")}
           </Typography>
           <Typography variant="caption" className={classes.genreBtn}>
             {post.genre}
           </Typography>
-          <IconButton>
-            <BookmarkAddOutlinedIcon />
+
+          <IconButton onClick={handleFavourite}>
+            {marked ? <BookmarkIcon /> : <BookmarkAddOutlinedIcon />}
           </IconButton>
           <IconButton>
             <MoreHorizOutlinedIcon />
@@ -96,31 +120,5 @@ const PostExcerpt = ({ post }) => {
     </Container>
   );
 };
-
-// const PostExcerpt = ({ post }) => {
-//     return (
-//       <article className="postItem">
-//         <h4>{post.title}</h4>
-//         <small>Genre :{post.genre}</small>
-//         <PostAuthor userId={post.user} />
-//         <TimeAgo timestamp={post.date} />
-//         <p>{post.content.substring(0, 100)}</p>
-//         <ReactionButtons post={post} inactive={true} />
-//         <Link to={`/posts/${post.id}`}>
-//           <button className="btn"> View Post</button>
-//         </Link>
-//         <button
-//           onClick={() => {
-//             if (currentUser) {
-//               dispatch(deletePost(post.id));
-//             }
-//           }}
-//           className="btn"
-//         >
-//           Delete
-//         </button>
-//       </article>
-//     );
-//   };
 
 export default PostExcerpt;
